@@ -1,7 +1,7 @@
 {
-  "name": "opencv-js-face-detection",
+  "name": "opencv-js-people-counting",
   "version": "1.0.0",
-  "description": "Realtime face detection using opencv-js",
+  "description": "Realtime people counting opencv-js",
   "keywords": [],
   "main": "src/index.jsx",
   "dependencies": {
