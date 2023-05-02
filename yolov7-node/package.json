@@ -6,16 +6,13 @@
     "start": "nodemon --watch src index.js"
   },
   "author": {
-    "name": "Wahyu Setianto",
-    "url": "https://github.com/Hyuto"
+    "name": "Muhammet Kerem Öztürk",
+    "url": "https://github.com/kerem-ozt"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hyuto/yolov7-node.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Hyuto/yolov7-node/issues"
+    "url": "https://github.com/kerem-ozt/people_counting"
   },
   "dependencies": {
     "cors": "^2.8.5",
