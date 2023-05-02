@@ -15,10 +15,6 @@ function src_canvas(webcamRef, socket) {
     const cap = new cv.VideoCapture(webcamRef.current.video);
     const mat = new cv.Mat(modelHeight, modelWidth, cv.CV_8UC4);
     const matC3 = new cv.Mat(modelHeight, modelWidth, cv.CV_8UC3);
-    // console.log('ctx: ', ctx);
-    // console.log('cap: ', cap);
-    // console.log('map: ', mat);
-    // console.log('matC3: ', matC3);
 
     const processVideo = async () => {
         try {
