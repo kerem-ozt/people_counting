@@ -3,8 +3,9 @@
  * @param {Array[Object]} boxes boxes array
  * @param {CanvasRenderingContext2D} ctx canvas rendering context
  */
-export const renderBoxes = (boxes, ctx) => {
+export const renderBoxes = (webcamRef, boxes, ctx) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
+    ctx.drawImage(webcamRef.current.video, 0, 0, canvas.width, canvas.height);
   
     const colors = new Colors();
   
