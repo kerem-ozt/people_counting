@@ -5,6 +5,7 @@ import cv from "@techstark/opencv-js";
 import "./styles.css";
 import io from 'socket.io-client';
 import "regenerator-runtime/runtime.js";
+import { renderBoxes } from "./utils.js";
 
 // video karelerini işleyen ve backend'e gönderen fonskiyon
 function src_canvas(webcamRef, socket) {
@@ -16,7 +17,8 @@ function src_canvas(webcamRef, socket) {
 
     // canvas bağlamını al
     const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    // const ctx = canvas.getContext('2d').willReadFrequently = true;
+    const ctx = canvas.getContext('2d', {willReadFrequently: true});
 
     // yeni bir video çekimi oluşturulması
     const cap = new cv.VideoCapture(webcamRef.current.video);
@@ -29,51 +31,47 @@ function src_canvas(webcamRef, socket) {
     const processVideo = async () => {
         try {
             // video akışı kapalıysa
-            if (window.streaming === null) {
-            // belleğin temizlenmesi
-            mat.delete();
-            matC3.delete();
-            return;
-            }
+            // if (window.streaming === null) {
+            // // belleğin temizlenmesi
+            // mat.delete();
+            // matC3.delete();
+            // return;
+            // }
             // görüntünün işlenmeye başlanması
             cap.read(mat); // video karesinin okunması
             cv.cvtColor(mat, matC3, cv.COLOR_RGBA2BGR); // RGBA'dan BGR'ye dönüşüm
-
             // [n x n] boyutunda görüntün doldurulması
             const maxSize = Math.max(matC3.rows, matC3.cols); // genişlik ve yükseklikten maksimumun alınması
             const xPad = maxSize - matC3.cols, // xPadding'in ayarlanması
-            xRatio = maxSize / matC3.cols; // set xRatio // xRatio'nun ayarlanması
-            const yPad = maxSize - matC3.rows, // set yPadding // yPadding'in ayarlanması
-            yRatio = maxSize / matC3.rows; // set yRatio // yRatio'nun ayarlanması
+            xRatio = maxSize / matC3.cols; // xRatio'nun ayarlanması
+            const yPad = maxSize - matC3.rows, // yPadding'in ayarlanması
+            yRatio = maxSize / matC3.rows; // yRatio'nun ayarlanması
             const matPad = new cv.Mat(); // dolgulu görüntü için yeni matris oluşturulması
             cv.copyMakeBorder(matC3, matPad, 0, yPad, 0, xPad, cv.BORDER_CONSTANT, [0, 0, 0, 255]); // siyah dolgu
-            
             // ön işleme görüntü matrisi
+            // cv.cvtColor(matPad, matPad, cv.COLOR_BGR2RGB);
             const input = cv.blobFromImage(
-            matPad,
-            1 / 255.0,
-            new cv.Size(modelWidth, modelHeight),
-            new cv.Scalar(0, 0, 0),
-            true,
-            false
+                matPad,
+                1 / 255.0,
+                new cv.Size(modelWidth, modelHeight),
+                new cv.Scalar(0, 0, 0),
+                true,
+                false
             );
-    
-            const array = input.data32F.slice(); // görüntü dizisi
-
+            const array = input.data32F.slice(); // görüntü dizisi 
             // görüntü dizisini arka uca gönderin ve yanıtı yani kutuları bekler
             const boxes = await new Promise((resolve) => {
               socket.emit("videoframe", array, xRatio, yRatio, (boxes) => {
                 resolve(boxes);
               });
             }); 
-            
             console.log('boxes: ', boxes);
-            // renderBoxes(boxes, ctx); // render fonskiyonu yazılacak ve kutuları çizecek
-            // input.delete(); // clean memory
-    
+            renderBoxes(webcamRef, boxes, ctx); // render fonskiyonu yazılacak ve kutuları çizecek
+            input.delete(); // clean memory
+            // matPad.delete(); // clean memory
             requestAnimationFrame(processVideo); // sonraki kareyi ister
         } catch (err) {
-            // console.error(err);
+            console.error(err);
         }
     };
 
@@ -91,7 +89,7 @@ export default function Lutfenlutfen() {
   const faceImgRef = React.useRef(null);
 
   // socket io kullanarak sunucuya bağlanılması
-  const socket = io.connect('http://localhost:4000', { transports : ['websocket'] }); // Add this -- our server will run on port 4000, so we connect to it from here
+  const socket = io.connect('http://localhost:4000', { transports : ['websocket'] });
   
   // Sunucudan model bilgilerini bekler
   socket.on("model-env", (data) => {
@@ -125,7 +123,6 @@ export default function Lutfenlutfen() {
             src_canvas(webcamRef, socket);
             const img = cv.imread(imgRef.current);
             cv.imshow(faceImgRef.current, img);
-
             img.delete();
             resolve();
           } catch (error) {
@@ -137,10 +134,13 @@ export default function Lutfenlutfen() {
     };
 
     let handle;
+    const delay = 2000; // Delay in milliseconds
     const nextTick = () => {
       handle = requestAnimationFrame(async () => {
         await detect();
-        nextTick();
+        setTimeout(() => {
+          nextTick();
+        }, delay);
       });
     };
     nextTick();
@@ -156,7 +156,6 @@ export default function Lutfenlutfen() {
         id="cameraInput"
         ref={webcamRef}
         className="webcam"
-        mirrored
         screenshotFormat="image/jpeg"
       />
       <img id="cameraInputasImg" className="inputImage" alt="input" ref={imgRef} />
