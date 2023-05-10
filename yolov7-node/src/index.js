@@ -19,20 +19,6 @@ databaseconnection();
 
 app.use('/user', UserRouter);
 
-// app.post('/signup', async (req, res) => {
-//   const user = {
-//     email: req.body.email,
-//     password: req.body.password
-//   }
-//   const userResponse = await admin.auth().createUser({
-//     email: user.email,
-//     password: user.password,
-//     emailVerified: false,
-//     disabled: false
-//   })
-//   res.json(userResponse)
-// })
-
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {
   console.log('Example app listening at http://localhost:4000')
