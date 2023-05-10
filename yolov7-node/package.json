@@ -16,6 +16,7 @@
     "url": "https://github.com/kerem-ozt/people_counting"
   },
   "dependencies": {
+    "@firebase/auth": "^0.23.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
