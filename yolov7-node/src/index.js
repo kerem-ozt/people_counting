@@ -2,9 +2,8 @@
 import http from 'http'
 import express from 'express'
 import cors from 'cors'
-import admin from 'firebase-admin'
 import UserRouter from './api/routes/user.js'
-import { onnxruntime } from './utils/onnxruntime.js'
+import CounterRouter from './api/routes/counter.js'
 import { databaseconnection } from './database.js'
 
 const app = express()
@@ -18,6 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 databaseconnection();
 
 app.use('/user', UserRouter);
+app.use('/counter', CounterRouter);
 
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {
@@ -25,8 +25,6 @@ server.listen(PORT, () => {
 })
 
 export default server
-
-onnxruntime();
 
 // These lines make "require" available
 // import { createRequire } from "module";

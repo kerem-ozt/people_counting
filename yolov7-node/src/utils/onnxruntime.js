@@ -82,6 +82,7 @@ export function onnxruntime() {
         const boxes = await detect(frame, xRatio, yRatio)
         // algılama sonuçlarını önyüze geri gönder
         callback(boxes)
+        console.log(boxes);
     })
     })
 }
