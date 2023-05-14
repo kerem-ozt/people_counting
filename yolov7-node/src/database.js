@@ -4,7 +4,7 @@ import cred from './peoplecounting-4f4a4-firebase-adminsdk-a3t7e-c71eac0a93.json
 
 export function databaseconnection() {
   admin.initializeApp({
-    credential: admin.credential.cert(cred)
-    // databaseURL: "https://peoplecounting-4f4a4-default-rtdb.firebaseio.com",
+    credential: admin.credential.cert(cred),
+    databaseURL: "https://peoplecounting-4f4a4-default-rtdb.firebaseio.com",
   })
 }
