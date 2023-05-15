@@ -6,5 +6,6 @@ export function databaseconnection() {
   admin.initializeApp({
     credential: admin.credential.cert(cred),
     databaseURL: "https://peoplecounting-4f4a4-default-rtdb.firebaseio.com",
+    // databaseURL: "https://peoplecounting-4f4a4.firebaseio.com",
   })
 }

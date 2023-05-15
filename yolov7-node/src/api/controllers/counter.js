@@ -28,6 +28,50 @@ class CounterController {
         }
     }
 
+    static async test(req, res) {
+        try {
+            let result = await CounterService.test(req);
+            if (!result.type) {
+                return res.send({type: false, message: result.message});
+            }
+            return res.send({type: true, data: result.data});
+        }
+        catch (err) {
+            return res.send({type: false, message: err});
+        }
+    }
+    
+    static async testWithNormalDatabase(req, res) {
+        try {
+            let result = await CounterService.testWithNormalDatabase(req);
+            if (!result.type) {
+                console.log('2');
+                return res.send({type: false, message: result.message});
+            }
+            console.log('3');
+            return res.send({type: true, data: result.data});
+        }
+        catch (err) {
+            console.log('4');
+            return res.send({type: false, message: err});
+        }
+    }
+
+    static async son(req, res) {
+        try {
+            let result = await CounterService.son(req);
+            if (!result.type) {
+                console.log('2');
+                return res.send({type: false, message: result.message});
+            }
+            console.log('3');
+            return res.send({type: true, data: result.data});
+        }
+        catch (err) {
+            console.log('4');
+            return res.send({type: false, message: err});
+        }
+    }
 }
 
 export default CounterController;
