@@ -47,7 +47,6 @@ class CounterService {
                     const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
                     // algılama sonuçlarını önyüze geri gönder
                     callback(boxes)
-                    console.log(boxes);
                 })
             })
 
@@ -72,7 +71,6 @@ class CounterService {
             return {type: true, message: 'Data saved successfully'};
         }
         catch (err) {
-            console.log('a',err);
             return {type: false, message: err};
         }
     }
@@ -114,7 +112,6 @@ class CounterService {
                     const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
                     // algılama sonuçlarını önyüze geri gönder
                     callback(boxes)
-                    // console.log(boxes);
                     let counter = 0;
                     if (boxes.length > 0) {
                         for (let i = 0; i < boxes.length; i++) {
@@ -124,7 +121,6 @@ class CounterService {
                         }
                     }
                     boxes.push(`detected people nums: ${counter}`);
-                    console.log(new Date());
                     const newPersonRef = ref.child(new Date().toISOString().replace(/T|\.|Z/g, '/'));
                     newPersonRef.set(boxes);
                     //ref.push({
@@ -183,7 +179,6 @@ class CounterService {
             return {type: true, message: 'Data saved successfully'};
         }
         catch (err) {
-            console.log('1',err);
             return {type: false, message: err};
         }
     }

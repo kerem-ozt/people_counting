@@ -103,7 +103,6 @@ class UserService {
             return {type: true, data: user};
         }
         catch (err) {
-            console.log(err);
             return {type: false, message: err};
         }
 

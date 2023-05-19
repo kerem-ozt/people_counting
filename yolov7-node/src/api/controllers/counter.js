@@ -58,7 +58,6 @@ class CounterController {
         try {
             let result = await CounterService.son(req);
             if (!result.type) {
-                console.log('2');
                 return res.send({type: false, message: result.message});
             }
             return res.send({type: true, data: result.data});

@@ -28,7 +28,7 @@ export function onnxruntime() {
         modelInfo.inputShape
     )
     await session.run({ images: tensor })
-    console.log(session)
+    // console.log(session)
     })()
 
     const io = new Server(server, {
