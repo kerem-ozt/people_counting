@@ -131,7 +131,6 @@ class CounterService {
 
         }
         catch (err) {
-            console.log('a',err);
             return {type: false, message: err};
         }
     }
