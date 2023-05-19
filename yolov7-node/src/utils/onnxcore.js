@@ -5,7 +5,7 @@ import ort from 'onnxruntime-node'
 
 export class OnnxKlas {
     static async createsession() {
-        const __filename = fileURLToPath('file:///C:/Users/MDP/Documents/GitHub/people_counting/yolov7-node/src/yolov7-tiny.onnx');
+        const __filename = fileURLToPath('file:///C:/Users/MDP/Desktop/p_c/people_counting/yolov7-node/src/yolov7-tiny.onnx');
         const __dirname = path.dirname(__filename);
     
         // model yapılandırması

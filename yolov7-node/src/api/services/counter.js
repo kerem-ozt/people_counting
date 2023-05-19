@@ -77,14 +77,15 @@ class CounterService {
         }
     }
 
+    // Decet and save data to firebase realtime database 
     static async test (req) {
         try{
 
             const db = getDatabase();
         
-            const ref = db.ref();
-            const usersRef = ref.child('users');    
-
+            const ref = db.ref('people');
+            // const usersRef = ref.child('users');    
+            
             const modelInfo = {
                 name: 'yolov7-tiny.onnx', // ONNX dosyası
                 inputShape: [1, 3, 640, 640] // model için giriş tensörünün şekli
@@ -113,13 +114,22 @@ class CounterService {
                     const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
                     // algılama sonuçlarını önyüze geri gönder
                     callback(boxes)
-                    console.log(boxes);
-                    usersRef.set({
-                        test: {
-                            date_of_birth: new Date(),
-                            full_name: boxes
-                        },
-                    });
+                    // console.log(boxes);
+                    let counter = 0;
+                    if (boxes.length > 0) {
+                        for (let i = 0; i < boxes.length; i++) {
+                            if (boxes[i].classId == 0) {
+                                counter++;
+                            }
+                        }
+                    }
+                    boxes.push(`detected people nums: ${counter}`);
+                    console.log(new Date());
+                    const newPersonRef = ref.child(new Date().toISOString().replace(/T|\.|Z/g, '/'));
+                    newPersonRef.set(boxes);
+                    //ref.push({
+                    //    boxes: boxes
+                    //});
                 })
             })
 
@@ -178,6 +188,7 @@ class CounterService {
         }
     }
 
+    // Detect and save data to firebase firestore database
     static async son (req) {
         try{
 
@@ -213,17 +224,24 @@ class CounterService {
                     const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
                     // algılama sonuçlarını önyüze geri gönder
                     callback(boxes)
-                    console.log(boxes);
+                    let counter = 0;
+                    if (boxes.length > 0) {
+                        for (let i = 0; i < boxes.length; i++) {
+                            if (boxes[i].classId == 0) {
+                                counter++;
+                            }
+                        }
+                    }
+                    boxes.push(`detected people nums: ${counter}`);
+                    boxes.push(new Date());
                     customerRef.add({
-                        date: new Date(),
                         box: boxes
                     });
                 })
             })
-
+            return {type: true, message: 'Data saved successfully'};
         }
         catch (err) {
-            console.log('1',err);
             return {type: false, message: err};
         }
     }
