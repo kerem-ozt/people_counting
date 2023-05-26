@@ -239,6 +239,81 @@ class CounterService {
             return {type: false, message: err};
         }
     }
+
+    static async getAll (req) {
+        try{
+            const db = admin.firestore();
+            
+            let customerRef = db.collection('people/2023-05-26');
+
+            customerRef.get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    console.log(doc.id, '=>', doc.data());
+                });
+            })
+
+            return {type: true, message: 'Data saved successfully'};
+        }
+        catch (err) {
+            console.log(err);
+            return {type: false, message: err};
+        }
+    }
+
+    static async getAllWithParam (req) {
+        try{
+            const db = getDatabase();
+            
+            const { date = '', time = '' } = req.body;
+
+            const customerRef = db.ref(`people/${date}/${time}`);
+            // const customerRef = db.ref(`people//`);
+            
+            console.log(date , time);
+
+            let data = [];
+
+            const snapshot = await customerRef.get();
+  
+            snapshot.forEach((doc) => {
+              data.push(doc.toJSON());
+            });
+
+            return {type: true, data, message: 'Data saved successfully'};
+        }
+        catch (err) {
+            console.log(err);
+            return {type: false, message: err};
+        }
+    }
+
+    static async delete (req) {
+        try{
+           const db = getDatabase();
+
+            const { date = '', time = '' } = req.body;
+
+            const customerRef = db.ref(`people/${date}/${time}`);
+            // const customerRef = db.ref(`people//`);
+
+            customerRef.remove(
+                (error) => {
+                  if (error) {
+                    console.log("Remove failed: " + error.message);
+                  } else {
+                    console.log("Remove succeeded.");
+                  }
+                }
+              );
+
+            return {type: true, message: 'Data saved successfully'};
+        }
+        catch (err) {
+            console.log(err);
+            return {type: false, message: err};
+        }
+    }
+
 }
 
 export default CounterService;
