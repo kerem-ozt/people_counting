@@ -47,7 +47,6 @@ class UserController {
 			return res.json({ type: true, data: result.data });
 		}
 		catch (error) {
-			console.log(2);
 			return res.json({ type: false, message: error.message });
 		}
 	}

@@ -58,7 +58,45 @@ class CounterController {
         try {
             let result = await CounterService.son(req);
             if (!result.type) {
-                console.log('2');
+                return res.send({type: false, message: result.message});
+            }
+            return res.send({type: true, data: result.data});
+        }
+        catch (err) {
+            return res.send({type: false, message: err});
+        }
+    }
+
+    static async getAll(req, res) {
+        try {
+            let result = await CounterService.getAll(req);
+            if (!result.type) {
+                return res.send({type: false, message: result.message});
+            }
+            return res.send({type: true, data: result.data});
+        }
+        catch (err) {
+            return res.send({type: false, message: err});
+        }
+    }
+
+    static async getAllWithParam(req, res) {
+        try {
+            let result = await CounterService.getAllWithParam(req);
+            if (!result.type) {
+                return res.send({type: false, message: result.message});
+            }
+            return res.send({type: true, data: result.data});
+        }
+        catch (err) {
+            return res.send({type: false, message: err});
+        }
+    }
+
+    static async delete(req, res) {
+        try {
+            let result = await CounterService.delete(req);
+            if (!result.type) {
                 return res.send({type: false, message: result.message});
             }
             return res.send({type: true, data: result.data});
