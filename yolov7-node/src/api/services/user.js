@@ -100,6 +100,7 @@ class UserService {
 
             const app = initializeApp(firebaseConfig);
             const userResponse = await signInWithEmailAndPassword(getAuth(), user.email, user.password);
+            console.log(userResponse);
             return {type: true, data: user};
         }
         catch (err) {
