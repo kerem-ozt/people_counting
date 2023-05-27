@@ -1,6 +1,13 @@
 import UserService from "../services/user.js";
 
 class UserController {
+    
+    /**
+	 * @route GET /user/getAll
+	 * @group User
+	 * @returns {object} 200 - Success message
+	 * @returns {Error} default - Unexpected error
+	 */
 
     static async getAll(req, res) {
         
@@ -19,6 +26,13 @@ class UserController {
 
     }
 
+    /**
+	 * @route GET /user/get/:uid
+	 * @group User
+	 * @returns {object} 200 - Success message
+	 * @returns {Error} default - Unexpected error
+	 */
+
     static async get(req, res) {
 
         try {
@@ -34,6 +48,15 @@ class UserController {
             return res.json({ type: false, message: error.message });
         }
     }
+
+    /**
+     * @route POST /user/register
+     * @group User
+     * @returns {object} 200 - Success message
+     * @returns {Error} default - Unexpected error
+     * @param {string} email.body.required - email
+     * @param {string} password.body.required - password
+    */
 
     static async register(req, res) {
     
@@ -51,6 +74,13 @@ class UserController {
 		}
 	}
 
+    /**
+     * @route DELETE /user/delete/:uid
+     * @group User
+     * @returns {object} 200 - Success message
+     * @returns {Error} default - Unexpected error
+     */
+
     static async delete(req, res) {
 
 		try {
@@ -64,6 +94,15 @@ class UserController {
 			return res.json({ type: false, message: error.message });
 		}
 	}
+
+    /**
+     * @route PUT /user/update/:uid
+     * @group User
+     * @returns {object} 200 - Success message
+     * @returns {Error} default - Unexpected error
+     * @param {string} email.body.required - email
+     * @param {string} password.body.required - password
+     */
 
     static async update(req, res) {
 
@@ -79,6 +118,15 @@ class UserController {
         }
     }
 
+    /**
+     * @route POST /user/login
+     * @group User
+     * @returns {object} 200 - Success message
+     * @returns {Error} default - Unexpected error
+     * @param {string} email.body.required - email
+     * @param {string} password.body.required - password
+     */
+
     static async login(req, res) {
 
         try {
@@ -92,6 +140,13 @@ class UserController {
             return res.json({ type: false, message: error.message });
         }
     }
+
+    /**
+     * @route POST /user/logout
+     * @group User
+     * @returns {object} 200 - Success message
+     * @returns {Error} default - Unexpected error
+    */
 
     static async logout(req, res) {
 

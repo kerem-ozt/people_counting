@@ -17,6 +17,7 @@ const firebaseConfig = {
 
 class CounterService {
 
+    // Detect and count people
     static async runDetector (req) {
         try {
             const modelInfo = {
@@ -50,33 +51,15 @@ class CounterService {
                 })
             })
 
+            return {type: true, message: 'Detector is running'};
         }
         catch (err) {
             return {type: false, message: err};
         }
     }
 
-    static async runDetectorSaveData (req) {
-        try{
-            const db = admin.firestore();
-            
-            let customerRef = db.collection('people');
-
-            customerRef.get().then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                });
-            })
-            
-            return {type: true, message: 'Data saved successfully'};
-        }
-        catch (err) {
-            return {type: false, message: err};
-        }
-    }
-
-    // Decet and save data to firebase realtime database 
-    static async test (req) {
+    // Detect and save data to firebase realtime database 
+    static async runAndSave (req) {
         try{
 
             const db = getDatabase();
@@ -128,61 +111,69 @@ class CounterService {
                     //});
                 })
             })
-
+            return {type: true, message: 'Detector working and data saving successfully'};
         }
         catch (err) {
             return {type: false, message: err};
         }
     }
 
-    static async testWithNormalDatabase (req) {
+    // Get data from firebase realtime database
+    static async getAllWithParam (req) {
         try{
-            const db = admin.firestore();
+            const db = getDatabase();
             
-            let customerRef = db.collection('people');
+            const { date = '', time = '' } = req.body;
 
-            // db.collection('people').doc('peoplecount').set({
-            //     people: 4
-            // });
+            const customerRef = db.ref(`people/${date}/${time}`);
+            // const customerRef = db.ref(`people//`);
+            
+            console.log(date , time);
 
-            customerRef.add({
-                people: 5
+            let data = [];
+
+            const snapshot = await customerRef.get();
+  
+            snapshot.forEach((doc) => {
+              data.push(doc.toJSON());
             });
 
-            customerRef.get().then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                });
-            })
-
-            // const cityRef = db.collection('people').doc('peoplecount');
-
-            // await cityRef.set({
-            //     title: new Date(),
-            //     body: 'Hello World',
-            // });
-
-            // await cityRef.set({
-            //     title: new Date(),
-            //     body: 'Hello World',
-            // });
-
-            // const res = await cityRef.add({
-            //     people: 4
-            // });
-
-            // const res = await cityRef.set({
-            //     capital: true
-            // }, { merge: true });
-
-            return {type: true, message: 'Data saved successfully'};
+            return {type: true, data, message: 'Data found successfully'};
         }
         catch (err) {
+            console.log(err);
             return {type: false, message: err};
         }
     }
 
-    // Detect and save data to firebase firestore database
+    // Delete data from firebase realtime database
+    static async delete (req) {
+        try{
+           const db = getDatabase();
+
+            const { date = '', time = '' } = req.body;
+
+            const customerRef = db.ref(`people/${date}/${time}`);
+            // const customerRef = db.ref(`people//`);
+
+            customerRef.remove(
+                (error) => {
+                  if (error) {
+                    console.log("Remove failed: " + error.message);
+                  } else {
+                    console.log("Remove succeeded.");
+                  }
+                }
+              );
+
+            return {type: true, message: 'Data deleted successfully'};
+        }
+        catch (err) {
+            console.log(err);
+            return {type: false, message: err};
+        }
+    }
+
     static async son (req) {
         try{
 
@@ -252,7 +243,7 @@ class CounterService {
                 });
             })
 
-            return {type: true, message: 'Data saved successfully'};
+            return {type: true, message: 'Data found successfully'};
         }
         catch (err) {
             console.log(err);
@@ -260,56 +251,68 @@ class CounterService {
         }
     }
 
-    static async getAllWithParam (req) {
+    static async runDetectorSaveData (req) {
         try{
-            const db = getDatabase();
+            const db = admin.firestore();
             
-            const { date = '', time = '' } = req.body;
+            let customerRef = db.collection('people');
 
-            const customerRef = db.ref(`people/${date}/${time}`);
-            // const customerRef = db.ref(`people//`);
+            customerRef.get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    console.log(doc.id, '=>', doc.data());
+                });
+            })
             
-            console.log(date , time);
+            return {type: true, message: 'Data saved successfully'};
+        }
+        catch (err) {
+            return {type: false, message: err};
+        }
+    }
 
-            let data = [];
+    static async testWithNormalDatabase (req) {
+        try{
+            const db = admin.firestore();
+            
+            let customerRef = db.collection('people');
 
-            const snapshot = await customerRef.get();
-  
-            snapshot.forEach((doc) => {
-              data.push(doc.toJSON());
+            // db.collection('people').doc('peoplecount').set({
+            //     people: 4
+            // });
+
+            customerRef.add({
+                people: 5
             });
 
-            return {type: true, data, message: 'Data saved successfully'};
-        }
-        catch (err) {
-            console.log(err);
-            return {type: false, message: err};
-        }
-    }
+            customerRef.get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    console.log(doc.id, '=>', doc.data());
+                });
+            })
 
-    static async delete (req) {
-        try{
-           const db = getDatabase();
+            // const cityRef = db.collection('people').doc('peoplecount');
 
-            const { date = '', time = '' } = req.body;
+            // await cityRef.set({
+            //     title: new Date(),
+            //     body: 'Hello World',
+            // });
 
-            const customerRef = db.ref(`people/${date}/${time}`);
-            // const customerRef = db.ref(`people//`);
+            // await cityRef.set({
+            //     title: new Date(),
+            //     body: 'Hello World',
+            // });
 
-            customerRef.remove(
-                (error) => {
-                  if (error) {
-                    console.log("Remove failed: " + error.message);
-                  } else {
-                    console.log("Remove succeeded.");
-                  }
-                }
-              );
+            // const res = await cityRef.add({
+            //     people: 4
+            // });
+
+            // const res = await cityRef.set({
+            //     capital: true
+            // }, { merge: true });
 
             return {type: true, message: 'Data saved successfully'};
         }
         catch (err) {
-            console.log(err);
             return {type: false, message: err};
         }
     }
