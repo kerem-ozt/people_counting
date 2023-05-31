@@ -5,7 +5,14 @@ import cors from 'cors'
 import UserRouter from './api/routes/user.js'
 import CounterRouter from './api/routes/counter.js'
 import { databaseconnection } from './database.js'
+
+import bodyParser from 'body-parser';
 // import expressSwagger from './api/swagger.js'
+
+import cookieParser from 'cookie-parser';
+import sessions from 'express-session';
+
+
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -18,14 +25,31 @@ const app = express()
 
 import expressSwagger from 'express-swagger-generator';
 
+app.use(cookieParser());
+const corsOptions = {
+	origin: 'http://localhost:4000', 
+	credentials: true
+};
 
 // expressSwagger(app);
 
 // önyüzden gelebilecek isteklere izin vermek için CORS eklentisi
 app.use(cors())
+
+app.use(sessions(
+	{ name: 'SessionCookie',
+		secret: 'Shsh!Secret!',
+		resave: false,
+		saveUninitialized: false,
+		cookie: { maxAge: 5 * 60000 }
+		 
+	}));
+
 const server = http.createServer(app)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(bodyParser.json());
 
 databaseconnection();
 
@@ -73,7 +97,7 @@ app.use('/counter', CounterRouter);
 
 const PORT = process.env.PORT || 4000
 server.listen(PORT, () => {
-  console.log('Example app listening at http://localhost:4000')
+  console.log('App listening at http://localhost:4000')
 })
 
 export default server

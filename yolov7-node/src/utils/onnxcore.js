@@ -29,7 +29,7 @@ export class OnnxKlas {
         }
         
         let session = await this.createsession();
-        console.log(session);
+        // console.log(session);
 
         const input = new Float32Array(frame.buffer) // giriş tensörlerinin oluşturulması
         const tensor = new ort.Tensor('float32', input, modelInfo.inputShape) // giriş tensörünün bir ONNX tensörüne dönüştürülmesi
