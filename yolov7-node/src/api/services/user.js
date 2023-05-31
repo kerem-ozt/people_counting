@@ -100,7 +100,11 @@ class UserService {
 
             const app = initializeApp(firebaseConfig);
             const userResponse = await signInWithEmailAndPassword(getAuth(), user.email, user.password);
-            console.log(userResponse);
+            
+            await userResponse.user.getIdToken().then((idToken) => {
+                req.session.token = idToken;
+            });
+
             return {type: true, data: user};
         }
         catch (err) {

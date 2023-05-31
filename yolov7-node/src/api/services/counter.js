@@ -128,7 +128,7 @@ class CounterService {
             const customerRef = db.ref(`people/${date}/${time}`);
             // const customerRef = db.ref(`people//`);
             
-            console.log(date , time);
+            // console.log(date , time);
 
             let data = [];
 
@@ -141,7 +141,7 @@ class CounterService {
             return {type: true, data, message: 'Data found successfully'};
         }
         catch (err) {
-            console.log(err);
+            // console.log(err);
             return {type: false, message: err};
         }
     }
@@ -246,7 +246,7 @@ class CounterService {
             return {type: true, message: 'Data found successfully'};
         }
         catch (err) {
-            console.log(err);
+            // console.log(err);
             return {type: false, message: err};
         }
     }
