@@ -1,5 +1,4 @@
 import CounterService from "../services/counter.js";
-
 class CounterController {
 
      /**
@@ -67,8 +66,8 @@ class CounterController {
     /**
      * @route DELETE /counter/delete
      * @group Counter
-     * @param {string} date.query.required - date
-     * @param {string} time.query.required - time
+     * @param {string} date.query.required - YYYY-MM-DD
+     * @param {string} time.query.required - HH:MM:SS
      * @returns {object} 200 - Success message
      * @returns {Error} default - Unexpected error
      */
