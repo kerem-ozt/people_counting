@@ -134,6 +134,13 @@ class UserService {
             const app = initializeApp(firebaseConfig);
             
             const userResponse = await signOut(getAuth());
+
+            req.session.destroy(function(err) {
+                if(err) {
+                    return {type: false, message: err};
+                }
+            });
+            
             return {type: true, data: userResponse};
         }
         catch (err) {

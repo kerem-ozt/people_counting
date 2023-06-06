@@ -1,5 +1,11 @@
 import UserService from "../services/user.js";
 
+/**
+ * @typedef User
+ * @property {string} email.required
+ * @property {string} password.required
+ */
+
 class UserController {
     
     /**
@@ -29,6 +35,7 @@ class UserController {
     /**
 	 * @route GET /user/get/:uid
 	 * @group User
+     * @param {string} uid - uid
 	 * @returns {object} 200 - Success message
 	 * @returns {Error} default - Unexpected error
 	 */
@@ -54,8 +61,7 @@ class UserController {
      * @group User
      * @returns {object} 200 - Success message
      * @returns {Error} default - Unexpected error
-     * @param {string} email.body.required - email
-     * @param {string} password.body.required - password
+     * @param {User.model} body.body
     */
 
     static async register(req, res) {
@@ -100,8 +106,7 @@ class UserController {
      * @group User
      * @returns {object} 200 - Success message
      * @returns {Error} default - Unexpected error
-     * @param {string} email.body.required - email
-     * @param {string} password.body.required - password
+     * @param {User.model} body.body
      */
 
     static async update(req, res) {
@@ -123,8 +128,7 @@ class UserController {
      * @group User
      * @returns {object} 200 - Success message
      * @returns {Error} default - Unexpected error
-     * @param {string} email.body.required - email
-     * @param {string} password.body.required - password
+     * @param {User.model} body.body
      */
 
     static async login(req, res) {
