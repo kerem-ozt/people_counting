@@ -42,7 +42,7 @@ class CounterController {
     }
 
     /**
-     * @route GET /counter/getAllWithParam
+     * @route POST /counter/getAllWithParam
      * @group Counter
      * @param {string} date.query.required - date
      * @param {string} time.query.required - time

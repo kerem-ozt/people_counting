@@ -105,7 +105,7 @@ class UserService {
                 req.session.token = idToken;
             });
 
-            return {type: true, data: user};
+            return {type: true, data: {user , token: req.session.token}};
         }
         catch (err) {
             return {type: false, message: err};
