@@ -73,7 +73,7 @@ function src_canvas(webcamRef, socket) {
           resolve(boxes);
         });
       });
-      console.log('boxes: ', boxes);
+      // console.log('boxes: ', boxes);
       renderBoxes(webcamRef, boxes, ctx); // render fonskiyonu yazılacak ve kutuları çizecek
       input.delete(); // clean memory
       // matPad.delete(); // clean memory
@@ -172,6 +172,7 @@ export default function Lutfenlutfen() {
         className='inputImage'
         alt='input'
         ref={imgRef}
+        style={{ display: 'none' }}
       />
       <canvas id='canvas' className='outputImage' ref={faceImgRef} />
       {/* {<div>Arayüz tasarlanacak</div>} */}
