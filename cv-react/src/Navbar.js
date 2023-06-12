@@ -7,7 +7,7 @@ const Navbar = () => {
     <NavbarContainer>
       <span className='title'>Gercek Zamanli Insan Sayma</span>
       <div>
-        <Link to='/'>Home</Link>
+        <Link to='/'>Monitör</Link>
         <Link to='/sorgu'>Sorgu</Link>
       </div>
     </NavbarContainer>

@@ -69,8 +69,6 @@ const Sorgu = () => {
         setData([]);
       });
   };
-
-  // console.log(allData);
   return (
     <SorguContainer>
       <Navbar />
@@ -78,14 +76,14 @@ const Sorgu = () => {
       <div className='filter'>
         <input
           type='text'
-          placeholder='Date'
+          placeholder='Tarih'
           onChange={(e) => {
             setDate(e.target.value);
           }}
         />
         <input
           type='text'
-          placeholder='Time'
+          placeholder='Saat'
           onChange={(e) => {
             setTime(e.target.value);
           }}
@@ -93,7 +91,7 @@ const Sorgu = () => {
         <button onClick={fetchData}>
           <SearchIcon />
         </button>
-        <button onClick={fetchAllData} className='fetch_all'>Fetch All</button>
+        <button onClick={fetchAllData} className='fetch_all'>Hepsini Getir</button>
       </div>
       <div className='content'>
       {data.map((item, index) => (
@@ -114,59 +112,14 @@ const Sorgu = () => {
         {item[1] && <p>{item[1]}</p>}
       </div>
     ))}
-    <h1>All Data</h1>
     {allData && typeof allData === 'string' ? (
       <div className="card">
+        <h1>Bütün Veriler</h1>
         <p>{allData}</p>
       </div>
     ) : (
-      <p>yarrami ye</p>
+      <p></p>
     )}
-        {/* {data.length === 0(<p>no data to show</p>)}
-        {data.length !== 0 ? (
-          <>
-            {data.map((item, index) => {
-              return (
-                <div className='card' key={index}>
-                  {item[0] && typeof item[0] === 'object' ? (
-                    <div className='bounding_box'>
-                      <p>bounding box</p>
-                      <p>x: {item[0].bounding[0]}</p>
-                      <p>y: {item[0].bounding[1]}</p>
-                      <p>width: {item[0].bounding[2]}</p>
-                      <p>height: {item[0].bounding[3]}</p>
-                      <p>classId: {item[0].classId}</p>
-                      <p>probability: {item[0].probability}</p>
-                    </div>
-                  ) : (
-                    <p>{item[0]}</p>
-                  )}
-                  {item[1] && <p>{item[1]}</p>}
-                </div>
-              );
-            })}
-          </>
-        ):null} */}
-        {/* {dummyData.data.map((item, index) => {
-          return (
-            <div className='card' key={index}>
-              {item[0] && typeof item[0] === 'object' ? (
-                <div className='bounding_box'>
-                  <p>bounding box</p>
-                  <p>x: {item[0].bounding[0]}</p>
-                  <p>y: {item[0].bounding[1]}</p>
-                  <p>width: {item[0].bounding[2]}</p>
-                  <p>height: {item[0].bounding[3]}</p>
-                  <p>classId: {item[0].classId}</p>
-                  <p>probability: {item[0].probability}</p>
-                </div>
-              ) : (
-                <p>{item[0]}</p>
-              )}
-              {item[1] && <p>{item[1]}</p>}
-            </div>
-          );
-        })} */}
       </div>
     </SorguContainer>
   );

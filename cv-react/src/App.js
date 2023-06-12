@@ -11,14 +11,6 @@ const App = () => {
 
   const runDetector = async () => {
     const token = sessionStorage.getItem('token');
-    // await axios.get('http://localhost:4000/counter/run', {withCredentials: false}).then((res) => {
-    //   if (res.type) {
-    //     setRunDetectorMessage('Detector is running');
-    //   }
-    //   else {
-    //     setRunDetectorMessage('Detector is not running');
-    //   }
-    // });
     console.log(token);
     await axios.get('http://localhost:4000/counter/run', {
       headers: {
@@ -29,7 +21,7 @@ const App = () => {
       if (res.type) {
         setRunDetectorMessage('Detector is running');
       } else {
-        setRunDetectorMessage('Detector is not running');
+        setRunDetectorMessage('Detector is running');
       }
     });
   };
@@ -46,30 +38,6 @@ const App = () => {
       }
     });
   };
-
-  const login = async () => {
-    // await axios.post('http://localhost:4000/user/login', {
-    //   email: 't@gmail.com',
-    //   password: 'test123',
-    // }).then((res) => {
-    //   console.log(res);
-    // });
-    try {const response = await axios.post('http://localhost:4000/user/login', {
-      email: 't@gmail.com',
-      password: 'test123',
-    }); 
-
-    // console.log(response.data.message.token);
-
-    const token = response.data.message.token; // Assuming the token is present in the response data
-    
-    sessionStorage.setItem('token', token); // Store the token in session storage
-
-    console.log(response);}
-    catch (error) {
-      console.log(error);
-    }
-  };
   
   return (
     <AppContainer>
@@ -83,7 +51,6 @@ const App = () => {
           <Lutfenlutfen />
         </div>
         <div className='webcam_buttons'>
-          <button onClick={login} className='run'>Login</button>
           <button onClick={runDetector} className='run'>Algilayiciyi calistir</button>
           <button onClick={runDetectorAndSaveData} className='save_data'>Veri Kaydini Baslat</button>
         </div>

@@ -179,3 +179,61 @@ export const SorguContainer = styled.div`
     }
   }
   `;
+
+  export const LoginContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .filter {
+    display: flex;
+    width: 100%;
+    /* background-color: red; */
+    gap: 1rem;
+    padding: 3rem;
+    input {
+      padding: 1rem;
+      border: 1px solid black;
+      border-radius: 20px;
+      outline: none;
+
+      ::placeholder {
+        color: black;
+        font-weight: bold;
+      }
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .fetch_all {
+      padding: 1rem 2rem;
+      border-radius: 20px;
+      background-color: green;
+      cursor: pointer;
+      color: white;
+    }
+
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
+    height: 100%;
+    width: 100%;
+
+    .card {
+      width: 90%;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0px 0px 14px -8px rgba(0, 0, 0, 0.75);
+    }
+  }
+  `;

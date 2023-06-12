@@ -4,6 +4,21 @@
  * @param {CanvasRenderingContext2D} ctx canvas rendering context
  */
 export const renderBoxes = (webcamRef, boxes, ctx) => {
+
+    console.log(boxes)
+    console.log(boxes.length)
+
+    let counter = 0;
+    if (boxes.length > 0) {
+      for (let i = 0; i < boxes.length; i++) {
+        if (boxes[i].classId == 0) {
+          counter++;
+        }
+      }
+    }
+
+
+
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
     ctx.drawImage(webcamRef.current.video, 0, 0, canvas.width, canvas.height);
   
@@ -46,6 +61,11 @@ export const renderBoxes = (webcamRef, boxes, ctx) => {
       // Draw labels
       ctx.fillStyle = "#ffffff";
       ctx.fillText(klass + " - " + score + "%", x1 - 1, yText < 0 ? 1 : yText + 1);
+
+      // Draw the counter on the frame.
+      const counterText = `Counter: ${counter}`;
+      ctx.fillStyle = '#000000';
+      ctx.fillText(counterText, 10, 10);
     });
   };
   

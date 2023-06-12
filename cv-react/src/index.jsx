@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Lutfenlutfen from './Lutfenlutfen';
 import App from './App';
 import Sorgu from './Sorgu';
+import Login from './Login';
+import Register from './Register';
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
     path: '/sorgu',
     element: <Sorgu />,
   },
+  {
+    path: '/girisyap',
+    element: <Login />,
+  },
+  {
+    path: '/kayitol',
+    element: <Register />,
+  }
 ]);
 
 const rootElement = document.getElementById('root');
