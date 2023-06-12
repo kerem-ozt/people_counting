@@ -2,7 +2,9 @@ import admin from 'firebase-admin'
 
 export async function verifyToken(req, res, next) {
 	try {
-		const token = req.session.token;
+		const {token} = req.headers;
+		// const token = req.session.token;
+		console.log(req.headers);
 		if (!token) {
 			return res.status(401).send('A token is required.');
 		}
