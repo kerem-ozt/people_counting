@@ -3,44 +3,8 @@ import Navbar from './Navbar';
 import { SorguContainer } from './App.style';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
+import { type } from 'os';
 
-const dummyData = {
-  type: true,
-  data: [
-    {
-      0: {
-        bounding: {
-          0: 11.385665893554688,
-          1: 92.38800048828125,
-          2: 388.6678009033203,
-          3: 542.8994750976562,
-        },
-        classId: 0,
-        probability: 0.6661915183067322,
-      },
-      1: 'detected people nums: 1',
-    },
-    {
-      0: {
-        bounding: {
-          0: 8.926666259765625,
-          1: 97.9910888671875,
-          2: 381.62347412109375,
-          3: 537.5987548828125,
-        },
-        classId: 0,
-        probability: 0.5846643447875977,
-      },
-      1: 'detected people nums: 1',
-    },
-    {
-      0: 'detected people nums: 0',
-    },
-    {
-      0: 'detected people nums: 0',
-    },
-  ],
-};
 const Sorgu = () => {
   const [date, setDate] = React.useState('');
   const [time, setTime] = React.useState('');
@@ -60,15 +24,26 @@ const Sorgu = () => {
   };
 
   const fetchAllData = async () => {
-    const res = await axios
-      .post('http://localhost:4000/counter/getAllWithParam')
-      .then((res) => {
-        const data = JSON.stringify(res.data.data);
-        console.log(typeof(data));
-        setAllData(data);
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+      alert('Sorgu yapmak için giriş yapmanız gerekmektedir.');
+      return;
+    }
+
+    const res = await axios.post('http://localhost:4000/counter/getAllWithParam', {
+      headers: {
+        token: `${token}`,
+      },
+      withCredentials: false,
+    }).then((res) => {
+        var result = Object.keys(res.data.data).map((key) => [key, res.data.data[key]]);
+        const jsonString = JSON.stringify(res.data.data, null, 2);
+        setAllData(jsonString);
         setData([]);
       });
   };
+
   return (
     <SorguContainer>
       <Navbar />
@@ -98,28 +73,34 @@ const Sorgu = () => {
       <div className="card" key={index}>
         {item[0] && typeof item[0] === 'object' ? (
           <div className="bounding_box">
-            <p>bounding box</p>
+            <h3>Bounding Boxes:</h3>
             <p>x: {item[0].bounding[0]}</p>
             <p>y: {item[0].bounding[1]}</p>
             <p>width: {item[0].bounding[2]}</p>
             <p>height: {item[0].bounding[3]}</p>
-            <p>classId: {item[0].classId}</p>
-            <p>probability: {item[0].probability}</p>
+            <br />
+            <h3>ClassId:</h3>
+            <p>{item[0].classId}</p>
+            <br />
+            <h3>Probability:</h3>
+            <p>{item[0].probability}</p>
           </div>
         ) : (
-          <p>{item[0]}</p>
+          <h3>{item[0]}</h3>
         )}
-        {item[1] && <p>{item[1]}</p>}
+        <br />
+        {item[1] && <h3>{item[1]}</h3>}
       </div>
     ))}
-    {allData && typeof allData === 'string' ? (
-      <div className="card">
-        <h1>Bütün Veriler</h1>
-        <p>{allData}</p>
-      </div>
-    ) : (
-      <p></p>
-    )}
+    {allData && typeof allData !== 'w' && (
+        <div className="card">
+          <h1>Bütün Veriler</h1>
+          <p>{allData}</p>
+          {/* {Array.isArray(allData) && allData.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))} */}
+        </div>
+      )}
       </div>
     </SorguContainer>
   );
