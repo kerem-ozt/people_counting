@@ -85,19 +85,6 @@ class CounterController {
         }
     }
 
-    static async runDetectorSaveData(req, res) {
-        try {
-            let result = await CounterService.runDetectorSaveData(req);
-            if (!result.type) {
-                return res.send({type: false, message: result.message});
-            }
-            return res.send({type: true, data: result.data});
-        }
-        catch (err) {
-            return res.send({type: false, message: err});
-        }
-    }
-
     static async testWithNormalDatabase(req, res) {
         try {
             let result = await CounterService.testWithNormalDatabase(req);
@@ -111,26 +98,13 @@ class CounterController {
         }
     }
 
-    static async son(req, res) {
+    static async deleteSession (req, res) {
         try {
-            let result = await CounterService.son(req);
+            let result = await CounterService.deleteSession(req);
             if (!result.type) {
                 return res.send({type: false, message: result.message});
             }
-            return res.send({type: true, data: result.data});
-        }
-        catch (err) {
-            return res.send({type: false, message: err});
-        }
-    }
-
-    static async getAll(req, res) {
-        try {
-            let result = await CounterService.getAll(req);
-            if (!result.type) {
-                return res.send({type: false, message: result.message});
-            }
-            return res.send({type: true, data: result.data});
+            return res.send({type: true});
         }
         catch (err) {
             return res.send({type: false, message: err});

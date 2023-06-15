@@ -5,9 +5,6 @@
  */
 export const renderBoxes = (webcamRef, boxes, ctx) => {
 
-    console.log(boxes)
-    console.log(boxes.length)
-
     let counter = 0;
     if (boxes.length > 0) {
       for (let i = 0; i < boxes.length; i++) {
@@ -110,7 +107,7 @@ export const renderBoxes = (webcamRef, boxes, ctx) => {
   }
   
   const labels = [
-    "person",
+    "insan",
     "bicycle",
     "car",
     "motorcycle",
@@ -177,7 +174,7 @@ export const renderBoxes = (webcamRef, boxes, ctx) => {
     "mouse",
     "remote",
     "keyboard",
-    "cell phone",
+    "cep telefonu",
     "microwave",
     "oven",
     "toaster",

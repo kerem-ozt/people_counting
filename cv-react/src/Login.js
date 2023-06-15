@@ -10,8 +10,6 @@ const Login = () => {
 
   const handleLogin = async () => {
     // Handle login logic here
-    console.log('Username:', username);
-    console.log('Password:', password);
 
     try {
       const response = await axios.post('http://localhost:4000/user/login', {
@@ -23,14 +21,14 @@ const Login = () => {
 
       sessionStorage.setItem('token', token); // Store the token in session storage
 
-      console.log(token);
-
-      console.log(response);
-
       // Redirect to desired route
       if (token !== undefined) {
         navigate('/'); // Replace '/dashboard' with the desired route
       }
+      else {
+          alert(response.data.message.code);
+      }
+
     } catch (error) {
       console.log(error);
     }

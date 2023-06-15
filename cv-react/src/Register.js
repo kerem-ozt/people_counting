@@ -11,8 +11,6 @@ const Register = () => {
   
     const handleRegister = async () => {
       // Handle registration logic here
-      console.log('Email:', email);
-      console.log('Password:', password);
 
       try {
         const response = await axios.post('http://localhost:4000/user/register', {
@@ -20,9 +18,12 @@ const Register = () => {
           password: password,
         });
 
-        console.log(response)
-
-        navigate('/girisyap');
+        if (response.data.type === true) {
+            navigate('/girisyap');
+        }
+        else {
+            alert(response.data.message.message);
+        }
 
       } catch (error) {
         console.log(error);

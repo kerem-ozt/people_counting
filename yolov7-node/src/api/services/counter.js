@@ -17,6 +17,29 @@ const firebaseConfig = {
 
 class CounterService {
 
+    static io = null; // Define a static variable for the Socket.IO server instance
+
+    static getSocketIOInstance() {
+        if (!CounterService.io) {
+          // Create a new Socket.IO server instance if it doesn't exist
+          CounterService.io = new Server(server, {
+            maxHttpBufferSize: 1e8,
+            pingTimeout: 60000,
+            cors: {
+              origin: 'http://localhost:3000',
+              methods: ['GET', 'POST'],
+            },
+          });
+    
+        //   CounterService.io.on('connection', (socket) => {
+        //     // Handle socket connections
+        //     // ...
+        //   });
+        }
+    
+        return CounterService.io;
+      }
+
     // Detect and count people
     static async runDetector (req) {
         try {
@@ -25,14 +48,11 @@ class CounterService {
                 inputShape: [1, 3, 640, 640] // model için giriş tensörünün şekli
             }
 
-            const io = new Server(server, {
-                maxHttpBufferSize: 1e8,
-                pingTimeout: 60000,
-                cors: {
-                    origin: 'http://localhost:3000', 
-                    methods: ['GET', 'POST'] 
-                }
-            })
+            const io = CounterService.getSocketIOInstance(); // Get the Socket.IO server instance
+
+            io.sockets.sockets.forEach((socket) => {
+                socket.disconnect(true);
+            });
 
             io.on('connection', (socket) => {
                 // model bilgilerini istemciye gönder
@@ -51,7 +71,7 @@ class CounterService {
                 })
             })
 
-            return {type: true, message: 'Detector is running'};
+            return {type: true, message: 'Algılayıcı Çalışıyor'};
         }
         catch (err) {
             return {type: false, message: err};
@@ -72,14 +92,11 @@ class CounterService {
                 inputShape: [1, 3, 640, 640] // model için giriş tensörünün şekli
             }
 
-            const io = new Server(server, {
-                maxHttpBufferSize: 1e8,
-                pingTimeout: 60000,
-                cors: {
-                    origin: 'http://localhost:3000', 
-                    methods: ['GET', 'POST'] 
-                }
-            })
+            const io = CounterService.getSocketIOInstance(); // Get the Socket.IO server instance
+
+            io.sockets.sockets.forEach((socket) => {
+                socket.disconnect(true);
+            });
 
             io.on('connection', (socket) => {
                 // model bilgilerini istemciye gönder
@@ -174,102 +191,6 @@ class CounterService {
         }
     }
 
-    static async son (req) {
-        try{
-
-            const db = admin.firestore();
-            
-            let customerRef = db.collection('people');
-
-            const modelInfo = {
-                name: 'yolov7-tiny.onnx', // ONNX dosyası
-                inputShape: [1, 3, 640, 640] // model için giriş tensörünün şekli
-            }
-
-            const io = new Server(server, {
-                maxHttpBufferSize: 1e8,
-                pingTimeout: 60000,
-                cors: {
-                    origin: 'http://localhost:3000', 
-                    methods: ['GET', 'POST'] 
-                }
-            })
-
-            io.on('connection', (socket) => {
-                // model bilgilerini istemciye gönder
-                socket.emit('model-env', modelInfo)
-
-                socket.on('disconnect', () => {
-                    // kullanıcı soket bağlantısının kesildiğini bildirir
-                    console.log('user disconnected')
-                })
-
-                // önyüzden görüntü dizisi alır ve görüntüdeki nesneyi algılamak üzere detect fonskiyonunu çalıştırır
-                socket.on('videoframe', async (frame, xRatio, yRatio, callback) => {
-                    const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
-                    // algılama sonuçlarını önyüze geri gönder
-                    callback(boxes)
-                    let counter = 0;
-                    if (boxes.length > 0) {
-                        for (let i = 0; i < boxes.length; i++) {
-                            if (boxes[i].classId == 0) {
-                                counter++;
-                            }
-                        }
-                    }
-                    boxes.push(`detected people nums: ${counter}`);
-                    boxes.push(new Date());
-                    customerRef.add({
-                        box: boxes
-                    });
-                })
-            })
-            return {type: true, message: 'Data saved successfully'};
-        }
-        catch (err) {
-            return {type: false, message: err};
-        }
-    }
-
-    static async getAll (req) {
-        try{
-            const db = admin.firestore();
-            
-            let customerRef = db.collection('people/2023-05-26');
-
-            customerRef.get().then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                });
-            })
-
-            return {type: true, message: 'Data found successfully'};
-        }
-        catch (err) {
-            // console.log(err);
-            return {type: false, message: err};
-        }
-    }
-
-    static async runDetectorSaveData (req) {
-        try{
-            const db = admin.firestore();
-            
-            let customerRef = db.collection('people');
-
-            customerRef.get().then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    console.log(doc.id, '=>', doc.data());
-                });
-            })
-            
-            return {type: true, message: 'Data saved successfully'};
-        }
-        catch (err) {
-            return {type: false, message: err};
-        }
-    }
-
     static async testWithNormalDatabase (req) {
         try{
             const db = admin.firestore();
@@ -290,29 +211,21 @@ class CounterService {
                 });
             })
 
-            // const cityRef = db.collection('people').doc('peoplecount');
-
-            // await cityRef.set({
-            //     title: new Date(),
-            //     body: 'Hello World',
-            // });
-
-            // await cityRef.set({
-            //     title: new Date(),
-            //     body: 'Hello World',
-            // });
-
-            // const res = await cityRef.add({
-            //     people: 4
-            // });
-
-            // const res = await cityRef.set({
-            //     capital: true
-            // }, { merge: true });
 
             return {type: true, message: 'Data saved successfully'};
         }
         catch (err) {
+            return {type: false, message: err};
+        }
+    }
+
+    static async deleteSession (req) {
+        try{
+            OnnxKlas.deleteAllSessions();
+            return {type: true, message: 'Session deleted successfully'};
+        }
+        catch (err) {
+            console.log(err);
             return {type: false, message: err};
         }
     }
