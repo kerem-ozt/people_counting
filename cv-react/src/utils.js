@@ -60,7 +60,7 @@ export const renderBoxes = (webcamRef, boxes, ctx) => {
       ctx.fillText(klass + " - " + score + "%", x1 - 1, yText < 0 ? 1 : yText + 1);
 
       // Draw the counter on the frame.
-      const counterText = `Counter: ${counter}`;
+      const counterText = `Sayaç: ${counter}`;
       ctx.fillStyle = '#000000';
       ctx.fillText(counterText, 10, 10);
     });
