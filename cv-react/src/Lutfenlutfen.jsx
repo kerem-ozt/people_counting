@@ -109,13 +109,6 @@ export default function Lutfenlutfen() {
     console.log('imageWidth: ', imageWidth);
   });
 
-  //console.log('1: ', webcamRef);
-  //webcam
-  //console.log('2: ', imgRef);
-  //img#cameraInputasImg.inputImage
-  //console.log('3: ', faceImgRef);
-  //canvas.outputImage
-
   React.useEffect(() => {
     // Algılama fonksiyonu
     const detect = async () => {
