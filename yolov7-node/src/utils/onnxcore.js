@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import ort from 'onnxruntime-node'
 
-export class OnnxKlas {
+export class OnnxRunTime {
 
     static stopDetection = false;
     static sessions = []; // Array to store active sessions
@@ -66,4 +66,4 @@ export class OnnxKlas {
     
 }
 
-export default OnnxKlas;
+export default OnnxRunTime;

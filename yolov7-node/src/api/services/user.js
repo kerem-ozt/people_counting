@@ -110,22 +110,6 @@ class UserService {
         catch (err) {
             return {type: false, message: err};
         }
-
-		// 	if ( user && createHash('md5').update(password).digest('hex') === user.password) {
-		// 		const token = generateAccessToken({ username: user.id });				
-		// 		req.session.userid = user.id;
-		// 		req.session.token = token;
-		// 		const refreshToken = generateRefreshToken({ username: user.id });
-		// 		await db.users.update(
-		// 			{refresh_token: refreshToken},
-		// 			{ where: { id: user.id } }
-		// 		);
-		// 		return ({ type: true, data: user, message: getLanguage(language, 'user_login_success')});
-		// 	}
-		// 	else {
-		// 		return { type: false, message: getLanguage(language, 'user_login_fail')}; 
-		// 	}
-		// }
 	}
 
     static async logout (req) {

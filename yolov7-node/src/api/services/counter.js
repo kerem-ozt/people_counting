@@ -1,6 +1,6 @@
 import { Server } from 'socket.io'
 import server from '../../index.js';
-import { OnnxKlas } from "../../utils/onnxcore.js";
+import { OnnxRunTime } from "../../utils/onnxcore.js";
 import { getDatabase } from 'firebase-admin/database';
 import admin from 'firebase-admin';
 
@@ -60,12 +60,12 @@ class CounterService {
 
                 socket.on('disconnect', () => {
                     // kullanıcı soket bağlantısının kesildiğini bildirir
-                    console.log('user disconnected')
+                    console.log('kullanıcı bağlantısı kesildi')
                 })
 
                 // önyüzden görüntü dizisi alır ve görüntüdeki nesneyi algılamak üzere detect fonskiyonunu çalıştırır
                 socket.on('videoframe', async (frame, xRatio, yRatio, callback) => {
-                    const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
+                    const boxes = await OnnxRunTime.detect(frame, xRatio, yRatio)
                     // algılama sonuçlarını önyüze geri gönder
                     callback(boxes)
                 })
@@ -83,16 +83,14 @@ class CounterService {
         try{
 
             const db = getDatabase();
-        
-            const ref = db.ref('people');
-            // const usersRef = ref.child('users');    
+            const ref = db.ref('people');   
             
             const modelInfo = {
                 name: 'yolov7-tiny.onnx', // ONNX dosyası
                 inputShape: [1, 3, 640, 640] // model için giriş tensörünün şekli
             }
 
-            const io = CounterService.getSocketIOInstance(); // Get the Socket.IO server instance
+            const io = CounterService.getSocketIOInstance(); // Socket.IO sunucusu örneğini al
 
             io.sockets.sockets.forEach((socket) => {
                 socket.disconnect(true);
@@ -104,12 +102,12 @@ class CounterService {
 
                 socket.on('disconnect', () => {
                     // kullanıcı soket bağlantısının kesildiğini bildirir
-                    console.log('user disconnected')
+                    console.log('kullanıcı bağlantısı kesildi')
                 })
 
                 // önyüzden görüntü dizisi alır ve görüntüdeki nesneyi algılamak üzere detect fonskiyonunu çalıştırır
                 socket.on('videoframe', async (frame, xRatio, yRatio, callback) => {
-                    const boxes = await OnnxKlas.detect(frame, xRatio, yRatio)
+                    const boxes = await OnnxRunTime.detect(frame, xRatio, yRatio)
                     // algılama sonuçlarını önyüze geri gönder
                     callback(boxes)
                     let counter = 0;
@@ -123,12 +121,9 @@ class CounterService {
                     boxes.push(`detected people nums: ${counter}`);
                     const newPersonRef = ref.child(new Date().toISOString().replace(/T|\.|Z/g, '/'));
                     newPersonRef.set(boxes);
-                    //ref.push({
-                    //    boxes: boxes
-                    //});
                 })
             })
-            return {type: true, message: 'Detector working and data saving successfully'};
+            return {type: true, message: 'Algılayıcı başarılı bir şekilde çalışıyor ve veriler kaydediliyor'};
         }
         catch (err) {
             return {type: false, message: err};
@@ -155,7 +150,7 @@ class CounterService {
               data.push(doc.toJSON());
             });
 
-            return {type: true, data, message: 'Data found successfully'};
+            return {type: true, data, message: 'Veri Başarıyla Bulundu'};
         }
         catch (err) {
             // console.log(err);
@@ -176,14 +171,14 @@ class CounterService {
             customerRef.remove(
                 (error) => {
                   if (error) {
-                    console.log("Remove failed: " + error.message);
+                    console.log("Silme işlemi başarısız:" + error.message);
                   } else {
-                    console.log("Remove succeeded.");
+                    console.log("Silme işlemi başarılı.");
                   }
                 }
               );
 
-            return {type: true, message: 'Data deleted successfully'};
+            return {type: true, message: 'Veri Başarıyla Silindi'};
         }
         catch (err) {
             console.log(err);
@@ -221,7 +216,7 @@ class CounterService {
 
     static async deleteSession (req) {
         try{
-            OnnxKlas.deleteAllSessions();
+            OnnxRunTime.deleteAllSessions();
             return {type: true, message: 'Session deleted successfully'};
         }
         catch (err) {
